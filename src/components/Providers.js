@@ -1,32 +1,10 @@
-import React, { useEffect } from 'react'
-// import Pro from "../API/http"
+import { useSelector } from 'react-redux'
 import Footer from './Footer'
 import Header from './Header'
-import httpClient from 'react-http-client';
-import { useParams } from 'react-router-dom';
 
-
-const Providers = ({ providers }) => {
-
-  // const [provider, setProvider] = useState({})
-  let { id } = useParams()
-
-  let imgId = providers.filter(pro => (
-    pro === id
-  ))
-
-  useEffect(() => {
-    const res = httpClient.get('https://4all.ltd/services/api/ads/companies?page_count=5')
-    console.log(res)
-    // const pros = async () => {
-    //   await Pro.getProvider().then(res => {
-    //     setProviders(res.data)
-    //     console.log(res.data)
-    //   })
-    // pros()
-  }, [])
-
-  // console.log(providers)
+const Providers = () => {
+  const selectedProvider = useSelector(state => state.providers.singleProvider)
+  console.log(selectedProvider)
 
   return (
     <div>
@@ -42,15 +20,30 @@ const Providers = ({ providers }) => {
               justifyContent: 'center',
               borderRadius: '10px',
               padding: '10px',
-              marginBottom: '10px'
+              marginBottom: '10px',
+              boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'
             }}
           >
             <img
-              src={`images/resources/${imgId}`}
+              src={selectedProvider.length && selectedProvider[0].cover_photos[0]["512px"]}
               alt='provider'
               width="70"
             />
           </span>
+          <h4>
+            {selectedProvider.length && selectedProvider[0].name.value}
+          </h4>
+          <div>
+            <ul>
+              <li>
+            {selectedProvider.length && Object.values(selectedProvider[0].social_links)}
+              </li>
+              <li>Conteact</li>
+              <li>Join</li>
+            </ul>
+          </div>
+          <div className='links'>
+          </div>
         </div>
         <div className='overview-feature'>
           <div className='overview'>

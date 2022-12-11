@@ -1,8 +1,31 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable jsx-a11y/alt-text */
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { getIndividuals, getProviders } from '../DataCenter/providerSlice'
+import Pagination from './Pagination'
 
-const Content = ({ providers }) => {
+const Content = () => {
+
+
+    const dispatcher = useDispatch()
+    const navigate = useNavigate()
+
+
+
+    const handleIndividual = (id) => {
+        dispatcher(getIndividuals(id))
+        navigate('/ourprovider')
+        console.log(id)
+    }
+
+    const { providers, loading } = useSelector(state => state.providers)
+    console.log(providers)
+
+
+    useEffect(() => {
+        dispatcher(getProviders())
+    }, [dispatcher])
 
     return (
         <div className='content'>
@@ -130,38 +153,15 @@ const Content = ({ providers }) => {
                 </div>
             </div>
             <div className='providers-section'>
-                <h3>Our Providers</h3>
+                <h3 style={{ marginLeft: '40%' }}>Our Providers</h3>
                 <div>
-                    <div className="pagination">
-                        <a href="#">&laquo;</a>
-                        {
-                            providers.map(a => (
-                                <>
-                                    <a href={`http://localhost:3000/${a}`} className='providers'>
-                                        <span
-                                            style={{
-                                                background: 'rgb(245, 245, 245)',
-                                                height: '100px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                borderRadius: '10px',
-                                                padding: '10px',
-                                                marginBottom: '10px'
-                                            }}
-                                        >
-                                            <img
-                                                src={`images/resources/${a}`}
-                                                width="70"
-                                            />
-                                        </span>
-                                        Amazon
-                                    </a>
-                                </>
-                            ))
-                        }
-                        <a href="#">&raquo;</a>
-                    </div>
+                    {
+                        loading ? (
+                            'loading...'
+                        ) : (
+                            <Pagination providers={providers} handleIndividual={handleIndividual} />
+                        ) 
+                    }
                 </div>
             </div>
         </div>
